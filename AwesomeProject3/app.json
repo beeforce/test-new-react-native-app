@@ -1,0 +1,16 @@
+
+{
+  "expo": {
+   "name": "Learning English",
+   "icon": "./src/images/icon.png",
+   "version": "1.0.0",
+   "slug": "Learning-English",
+   "sdkVersion": "27.0.0",
+   "ios": {
+     "bundleIdentifier": "com.cenixoft.learningEnglish"
+   },
+   "android": {
+     "package": "com.cenixoft.learningEnglish"
+   }
+  }
+}
