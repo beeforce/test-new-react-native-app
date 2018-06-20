@@ -3,10 +3,11 @@ import {
   StyleSheet,
   View,
   Dimensions,
-
-  
+  Text,
 } from 'react-native';
 import * as firebase from 'firebase';
+import Swiper from 'react-native-deck-swiper'
+import { CardViewWithImage, CardView } from 'react-native-simple-card-view';
 
 
 
@@ -31,6 +32,26 @@ export default class ProfileScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+      <CardViewWithImage
+        width={300}
+        content={ 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. At aut distinctio!' }
+        source={ {uri: 'https://placeimg.com/640/480/tech'} }
+        title={ 'Hello World!' }
+        imageWidth={ 100 }
+        imageHeight={ 100 }
+        roundedImage={ true }
+        roundedImageValue={ 50 }
+        imageMargin={ {top: 10} }
+    />
+    <CardView>
+    <View>
+        <Text>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet blanditiis dolores eos ipsam nulla
+            numquam officia provident repellat suscipit. Impedit itaque natus obcaecati odit quas recusandae. Deserunt
+            ipsam iusto molestiae!
+        </Text>
+        </View>
+    </CardView>
       </View>
     );
   }
@@ -43,7 +64,20 @@ const SCREEN_WIDTH = Dimensions.get("window").width
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    marginTop: Expo.Constants.statusBarHeight,
+    backgroundColor: "#F5FCFF",
   },
+  card: {
+    width: SCREEN_WIDTH * 0.8,
+    height: SCREEN_HEIGHT * 0.6,
+    borderRadius: 4,
+    borderWidth: 2,
+    borderColor: "#E8E8E8",
+    backgroundColor: "white",
+    alignItems: 'center',
+  },
+  text: {
+    textAlign: "center",
+    fontSize: 50,
+    backgroundColor: "transparent"
+  }
 });

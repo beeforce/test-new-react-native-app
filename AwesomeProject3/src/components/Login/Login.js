@@ -1,10 +1,15 @@
 import React, {Component} from 'react'
-import  { StyleSheet, View, Image, Text, Dimensions, TextInput, TouchableOpacity, Alert, ImageBackground, ActivityIndicator } from 'react-native';
+import  { StyleSheet, View, Image, Text, Dimensions, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import * as firebase from 'firebase';
 import { createStackNavigator } from 'react-navigation';
-import Homepage from '../Home/Homepage';
 import Signup from '../Login/Signup';
 import RootNavigation from '../navigation/RootNavigation';
+import { Button } from 'react-native-elements';
+import AwesomeButton from 'react-native-really-awesome-button/src/themes/rick';
+// import Icon from 'react-native-vector-icons/FontAwesome';
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import IcoMoonConfig from '../../selection.json';
+const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
 
 
 // set connection of firebase
@@ -45,7 +50,7 @@ class Login extends Component {
       ];
     this.state = { email: '' };
     this.state = { password: ''};
-    this.state = { isLoading: true};
+    this.state = { isLoading: false};
     this.state = { curTime: ''};
   }
 
@@ -131,43 +136,89 @@ class Login extends Component {
         }
     }
     
-
-    componentDidMount() {
-        // firebase.auth().onAuthStateChanged((user) => {
-        //     if(user != null){
-        //         console.log(user)
-        //     }
-        // })
-        this.setState({isLoading: false})
-    }
-
   render() {
 
     if(this.state.isLoading){
       return(
-        <ImageBackground source={require('../../images/image2.jpg')}
-        style = {{width:windowWidth, height:windowHeight}}>
-        <View style={{flex: 1, justifyContent: 'center'}}>
-           <ActivityIndicator
-      animating
-      color="#fff"
-      size="large"
-      style={styles.activityIndicator}
-    />
+        <View style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
+           <ActivityIndicator size="large" color="#0000ff" style = {{ alignSelf: 'center' , flex: 1}} />
      </View>
-    </ImageBackground>
       )
     }
     return (
-      <View style={styles.container}>
-      <ImageBackground source={require('../../images/image2.jpg')}
-      style = {{width:windowWidth, height:windowHeight}}>
+      // <View style={styles.container}>
+      // <View style={styles.contentContainer}>
+      // <Image source = {require('../../images/logo_app.png')}
+      //         resizeMode={'stretch'}
+      //         style = {{ width:windowWidth * 0.7, height: windowHeight * 0.2, alignSelf: 'center', marginTop:40 }}
+      //         ></Image>
+      // <View style={styles.content}>
+      // <View style={styles.searchSection}>
+      // <Icon name="envelop" style={{ paddingRight: 10, }} size={25} color = '#2c3e50'/>
+      // <TextInput style={styles.inputtextstyle}
+      // placeholder="Email Address"
+      // placeholderTextColor="#2c3e50"
+      // underlineColorAndroid="transparent"
+      // onChangeText={(email) => this.setState({email})}
+      // value={this.state.email}
+      // keyboardType = "email-address"
+      // returnKeyType = "next"
+      // onSubmitEditing = {() => this.passwordInput.focus()}
+      // ></TextInput>
+      // </View>
+      // <View style={styles.searchSection}>
+      // <Icon name="keyboard" style={{ paddingRight: 10,}} size={25} color = '#2c3e50'/>
+      // <TextInput style={styles.inputtextstyle}
+      //  placeholder="Password"
+      //  placeholderTextColor="#2c3e50"
+      //  underlineColorAndroid="transparent"
+      //  onChangeText={(password) => this.setState({password})}
+      // value={this.state.password}
+      // returnKeyType = "go"
+      // onSubmitEditing = {() => this.loginFirebase(this.state.email, this.state.password)}
+      // secureTextEntry
+      // ref = {(input) => this.passwordInput = input}
+      // ></TextInput>
+      // </View>
+      // <TouchableOpacity style={styles.LoginButton}
+      // onPress = {() => this.loginFirebase(this.state.email, this.state.password)}
+      // ><Text style={styles.LoginTextstyle}>Login</Text></TouchableOpacity>
+      // <TouchableOpacity style={styles.LoginButton2}
+      // onPress = {() => this.loginWithFacebook()}
+      // ><Text style={styles.LoginTextstyle}>Connect with Facebook</Text></TouchableOpacity>
+      // <View style = {styles.signupContainer}>
+      // <Text style = {{color: '#ffffff'}}>Don't have an account? </Text>
+      // </View>
+      // </View>
+      // </View>
+      // <View style={styles.footer}>
+      // <View style = {{flexDirection: 'row', justifyContent: 'space-between'}} >
+      // <TouchableOpacity>
+      //  <Text style={{color: '#c44569', fontSize: 16, fontFamily: 'Roboto_Regular', paddingLeft:15, paddingBottom: 20}}>Forget Password</Text></TouchableOpacity>
+      // <TouchableOpacity
+      //  onPress={() => this.props.navigation.push('Signup')}>
+      //  <Text style={{color: '#c44569', fontSize: 16, fontFamily: 'Roboto_Regular', paddingRight:15, paddingBottom: 20}}>Create Account</Text></TouchableOpacity>
+      //  {/* <Text style={{color: '#2ecc71', fontSize: 15, fontWeight: 'bold', textShadowColor: 'rgba(0, 0, 0, 0.75)', 
+      //  textShadowOffset: {width: -1, height: 1},textShadowRadius: 10}}>Signup!</Text></TouchableOpacity> */}
+      // </View>
+      // </View>
+      // </View>
+      <View style = {{flex:1, backgroundColor: '#ffffff'}}>
+      <View style={styles.contentContainer}>
+        <View style = {{flexDirection: 'column'}}>
+        <View style={styles.container} >
+          <View style={styles.background} >
+            <View style={styles.image}>
+      <Image source = {require('../../images/logo_app.png')}
+              resizeMode={'stretch'}
+              style = {{ width:windowWidth * 0.7, height: windowHeight * 0.2, alignSelf: 'center', marginTop:40 }}
+              ></Image>
       <View style={styles.content}>
-      <Text style={{color: '#ffffff', fontSize:50, fontWeight: 'bold', alignSelf:'center'}}>Welcome</Text>
-      <View style={styles.loginFormstyle}>
+      <View style={styles.searchSection}>
+      <Icon name="envelop" style={{ paddingRight: 10, }} size={25} color = '#2c3e50'/>
       <TextInput style={styles.inputtextstyle}
-      placeholder="Enter your email"
-      placeholderTextColor="#ffffff"
+      placeholder="Email Address"
+      placeholderTextColor="#2c3e50"
       underlineColorAndroid="transparent"
       onChangeText={(email) => this.setState({email})}
       value={this.state.email}
@@ -175,9 +226,12 @@ class Login extends Component {
       returnKeyType = "next"
       onSubmitEditing = {() => this.passwordInput.focus()}
       ></TextInput>
+      </View>
+      <View style={styles.searchSection}>
+      <Icon name="keyboard" style={{ paddingRight: 10,}} size={25} color = '#2c3e50'/>
       <TextInput style={styles.inputtextstyle}
-       placeholder="Enter your password"
-       placeholderTextColor="#ffffff"
+       placeholder="Password"
+       placeholderTextColor="#2c3e50"
        underlineColorAndroid="transparent"
        onChangeText={(password) => this.setState({password})}
       value={this.state.password}
@@ -186,26 +240,47 @@ class Login extends Component {
       secureTextEntry
       ref = {(input) => this.passwordInput = input}
       ></TextInput>
-      <TouchableOpacity style={styles.LoginButton}
+      </View>
+      <AwesomeButton
+          style={styles.LoginButton}
+          type="anchor"
+          width={ windowWidth * 0.75}
+          textColor="#fff"
+          onPress = {() => this.loginFirebase(this.state.email, this.state.password)}
+        >
+          Login
+        </AwesomeButton>
+      {/* <TouchableOpacity style={styles.LoginButton}
       onPress = {() => this.loginFirebase(this.state.email, this.state.password)}
-      ><Text style={styles.LoginTextstyle}>Login</Text></TouchableOpacity>
-      <Text style={{color: '#ffffff', marginTop: 10, alignSelf: 'center', fontSize: 16,}}>or</Text>
-      <TouchableOpacity style={styles.LoginButton2}
-      onPress = {() => this.loginWithFacebook()}
-      ><Text style={styles.LoginTextstyle}>Connect with Facebook</Text></TouchableOpacity>
+      ><Text style={styles.LoginTextstyle}>Login</Text></TouchableOpacity> */}
+      <Text style = {{color:'#2c3e50', alignSelf: 'center', paddingTop: 10, fontFamily: 'Roboto_medium', fontSize: 15, fontWeight: 'bold'}}>OR</Text>
       </View>
-      <View style = {styles.signupContainer}>
-      <Text style = {{color: '#ffffff'}}>Don't have an account? </Text>
-      <TouchableOpacity
-       onPress={() => this.props.navigation.push('Signup')}>
-      {/* onPress = {() => this.signUpUser(this.state.email,this.state.password)}> */}
-       <Text style={{color: '#2ecc71', fontSize: 15, fontWeight: 'bold', textShadowColor: 'rgba(0, 0, 0, 0.75)', 
-       textShadowOffset: {width: -1, height: 1},textShadowRadius: 10}}>Signup!</Text></TouchableOpacity>
+            </View>
+          </View>
+        </View>
+        <TouchableOpacity style={styles.LoginButton2}
+          onPress = {() => this.loginWithFacebook()}
+          >
+          <View style = {{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Icon name="facebook" style={{ paddingRight: 10,}} size={20} color = '#fff'/>
+          <Text style={styles.LoginTextstyle}>Connect with Facebook</Text>
+          </View>
+        </TouchableOpacity>
+        </View>
+        </View>
+        <View style={styles.footer}>
+        <View style = {{flexDirection: 'row', justifyContent: 'space-between'}} >
+        <TouchableOpacity>
+        <Text style={{color: '#c44569', fontSize: 16, fontFamily: 'Roboto_Regular', paddingLeft:15, paddingBottom: 20}}>Forget Password</Text></TouchableOpacity>
+        <TouchableOpacity
+        onPress={() => this.props.navigation.push('Signup')}>
+        <Text style={{color: '#c44569', fontSize: 16, fontFamily: 'Roboto_Regular', paddingRight:15, paddingBottom: 20}}>Create Account</Text></TouchableOpacity>
+        {/* <Text style={{color: '#2ecc71', fontSize: 15, fontWeight: 'bold', textShadowColor: 'rgba(0, 0, 0, 0.75)', 
+        textShadowOffset: {width: -1, height: 1},textShadowRadius: 10}}>Signup!</Text></TouchableOpacity> */}
+        </View>
       </View>
       </View>
-      </ImageBackground>
-      </View>
-    )
+    );
   }
 }
 
@@ -213,57 +288,72 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
     
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      paddingTop: Expo.Constants.statusBarHeight,
-    },
+  container: {
+    alignSelf: 'center',
+    width: windowWidth,
+    overflow: 'hidden',
+    margin: 10,
+    height: windowHeight * 0.73,
+  },
+  background: {
+    borderRadius: (windowHeight+windowWidth) /2,
+    width: windowWidth + 200,
+    height: windowHeight,
+    marginLeft: -100,
+    position: 'absolute',
+    bottom: 0,
+    overflow: 'hidden',
+  },
+  image: {
+    height: windowHeight * 0.73,
+    width: windowWidth,
+    position: 'absolute',
+    bottom: 0,
+    marginLeft: 100,
+    backgroundColor: '#f2f2f2'
+  },
+  contentContainer:{
+    flex:1
+  },
     content:{
-      marginTop: 70,
-      justifyContent: 'center',
+      marginTop: 40
     },
     canvas: {
         width: windowWidth,
         height: windowHeight * 0.33
     },
-    loginFormstyle: {
-        marginTop: 30,
+    searchSection: {
+      flexDirection: 'row',
+      alignItems: 'baseline',
+      height: 50,
+      margin: 3,
+      marginHorizontal: 40,
+      borderBottomWidth: 0.5, 
+      borderColor: '#3d3d3d',
     },
     inputtextstyle:{
-        height: 50,
-        margin: 3,
-        marginHorizontal: 40,
-        padding: 10,
-        backgroundColor: '#747d8c',
-        borderRadius: 10,
-        color: '#ffffff'
+      flex: 1,
+      paddingTop: 10,
+      paddingLeft: 7,
+      fontSize: 16,
+      fontFamily: 'Roboto_medium'
     },
     LoginButton:{
-      marginTop: 10,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#9b59b6',
-      marginHorizontal: 40,
-      height: 50,
-      borderRadius: 10,
+      marginTop: 30,
+      alignSelf: 'center',
+      height: 55,
     },
     LoginButton2:{
-      marginTop: 10,
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: '#2980b9',
       marginHorizontal: 40,
-      height: 50,
-      borderRadius: 10,
+      height: 55,
+      borderRadius: 27,
     },
     LoginTextstyle:{
       color: '#ffffff',
       fontWeight: 'bold',
-    },
-    signupContainer:{
-        flexDirection: 'row',
-        justifyContent: 'center',
-        marginTop: 10,
     },
   });
 

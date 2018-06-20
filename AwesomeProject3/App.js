@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text, View, Platform, StatusBar  } from 'react-native';
 import Expo from 'expo';
-import RootStack from './src/components/Login/Login';
+import Setup from './src/boot/Setup';
 
 export default class App extends React.Component {
   render() {
     return (
-     <RootStack />
+     <Setup />
     );
   }
 }

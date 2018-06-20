@@ -14,12 +14,17 @@ import {
   Dimensions,
   ImageBackground,
   FlatList,
-  Modal
+  Modal,
+  Platform
 } from 'react-native';
 import * as firebase from 'firebase';
 import Swiper from 'react-native-swiper';
 import CardStack, { Card } from 'react-native-card-stack-swiper';
 import * as Progress from 'react-native-progress';
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import IcoMoonConfig from '../../selection.json';
+import PinIconImage from '../styles/piniconimage';
+const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
 
 const ARTICLES = [
   { id: "1", uri: require('../../images/image.jpg'), 
@@ -75,6 +80,7 @@ export default class FeedScreen extends React.Component {
                   user:null,
                   Modalopen : false,
                   loading: true,
+                  pressStatus: false,
                 }
     
   } 
@@ -106,28 +112,40 @@ export default class FeedScreen extends React.Component {
 
 
 //swipe right of card swipe
-swipeRight = () => {
+swipeBottom = () => {
   if(this.state.cardIndex < ARTICLES_length-1){
     this.setState({ cardIndex: this.state.cardIndex + 1 })
 }else{
-    this.swiper.goBackFromRight();
+    this.swiper.disableBottomSwipe
+    this.swiper.goBackFromBottom();
+}
+};
+
+//swipe right of card swipe
+swipeBack = () => {
+  if(this.state.cardIndex === 0){
+    
+}
+else{
+    this.swiper.goBackFromTop();
+    this.setState({ cardIndex: this.state.cardIndex - 1 })
 }
 };
 
 
 //swipe left of card swipe
-swipeLeft = () => {
+swipeTop = () => {
   console.log(this.state.cardIndex)
   if(this.state.cardIndex <= 0){
 
   }
   if (this.state.cardIndex === 0) {
-    this.swiper.goBackFromRight();
+    this.swiper.goBackFromTop();
   }
   if (this.state.cardIndex > 0) {
     this.setState({ cardIndex: this.state.cardIndex - 1 })
-    this.swiper.goBackFromRight();
-    this.swiper.goBackFromRight();
+    this.swiper.goBackFromTop();
+    this.swiper.goBackFromBottom();
 }
 
 };
@@ -137,22 +155,21 @@ _keyExtractor = (item, index) => item._key;
 
 renderItem(item){
   return(
-  <View style = {{ flex: 1, marginBottom: 15, borderBottomWidth: 0.5, borderColor: '#c9c9c9',}}>
+  <View style = {{ flex: 1, marginTop: 15, borderBottomWidth: 0.5, borderColor: '#c9c9c9', backgroundColor: '#fff' }}>
   <View style = {{ flex: 1, flexDirection: 'row', marginLeft:20, marginRight: 20, marginBottom: 15,}} >
-  <Image source = {{uri: item.uri}} style={{ width:SCREEN_WIDTH* 0.15, height:SCREEN_WIDTH* 0.15,
-    backgroundColor:'#fff', borderRadius:(SCREEN_WIDTH* 0.15)/2, marginLeft: 10,}}></Image>
+  {this.getImageTypeTips(item.type)}
   <View style = {{flex: 1, flexDirection: 'column', marginLeft: 10}}>
 
   <View style = {{flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline'}}>
 
   <View style = {{flex: 1,}}>
-  <View style = {{borderColor: '#e67e22', borderRadius: 5, borderWidth: 2, width:57}}>
-  <Text style = {{margin:2, color:'#e67e22', fontSize: 12,}}>Featured</Text>
+  <View style = {{borderColor: '#e67e22', borderRadius: 5, borderWidth: 2, alignSelf: 'flex-start'}}>
+  <Text style = {{margin:2, color:'#e67e22', fontSize: 12,}}>{item.type}</Text>
   </View>
   </View>
   
   <View style = {{flex: 1, flexDirection: 'row', alignItems: 'baseline', alignSelf: 'flex-end'}}>
-  <Text style = {{marginLeft:5, color:'#000000', fontSize: 12,}}>Posted :</Text>
+  <Icon name="clock2" style={{ paddingRight:5,}} size={13} color = '#000'/>
   <Text style = {{margin:2, color:'#000000', fontSize: 12}}>{item.date}</Text>
   </View>
 
@@ -229,58 +246,64 @@ _onCloseModal = () => {
 //on open a modal swipe card
 _pressRow = (rowID) => {
   this.setState({
-    Modalopen: true
+    Modalopen: true,
+    pressStatus: true
   })
 }
 
 getImageTypeTips = (type) => {
   switch (type) {
     case "Announcement":
-        return (<Image resizeMode = 'stretch' source = {{uri: 'https://firebasestorage.googleapis.com/v0/b/test-fb2a3.appspot.com/o/dataImages%2FtipsTypeImages%2Ficon_annou.png?alt=media&token=b15cf403-ed6e-4e7c-90d9-353035ee3399'}} style={{ width:25, height:25, borderRadius:(25/2),}}></Image>)
+        return (<Image resizeMode = 'contain' source = {{uri: 'https://firebasestorage.googleapis.com/v0/b/test-fb2a3.appspot.com/o/dataImages%2FtipsTypeImages%2Ficon_annou.png?alt=media&token=b15cf403-ed6e-4e7c-90d9-353035ee3399'}} 
+        style={{ width:SCREEN_WIDTH* 0.1, height:SCREEN_WIDTH* 0.1, marginLeft: 10, borderRadius: (SCREEN_WIDTH* 0.1 + SCREEN_WIDTH* 0.1)/2}}></Image>)
     case "Document":
-        return (<Image resizeMode = 'stretch' source = {{uri: 'https://firebasestorage.googleapis.com/v0/b/test-fb2a3.appspot.com/o/dataImages%2FtipsTypeImages%2Ficon_doc.png?alt=media&token=8932c2fd-739d-4a3e-b125-e90f80e6c8af'}} style={{ width:25, height:25, borderRadius:(25/2)}}></Image>)
+        return (<Image resizeMode = 'contain' source = {{uri: 'https://firebasestorage.googleapis.com/v0/b/test-fb2a3.appspot.com/o/dataImages%2FtipsTypeImages%2Ficon_doc.png?alt=media&token=8932c2fd-739d-4a3e-b125-e90f80e6c8af'}} 
+        style={{ width:SCREEN_WIDTH* 0.1, height:SCREEN_WIDTH* 0.1, marginLeft: 10, borderRadius: (SCREEN_WIDTH* 0.1 + SCREEN_WIDTH* 0.1)/2 }}></Image>)
     case "English":
-        return (<Image resizeMode = 'stretch' source = {{uri: 'https://firebasestorage.googleapis.com/v0/b/test-fb2a3.appspot.com/o/dataImages%2FtipsTypeImages%2Ficon_pen.png?alt=media&token=1e6623e2-fd87-41d7-a5c5-f13db5d0b10c'}} style={{ width:25, height:25, borderRadius:(25/2)}}></Image>)
+        return (<Image resizeMode = 'contain' source = {{uri: 'https://firebasestorage.googleapis.com/v0/b/test-fb2a3.appspot.com/o/dataImages%2FtipsTypeImages%2Ficon_pen.png?alt=media&token=1e6623e2-fd87-41d7-a5c5-f13db5d0b10c'}} 
+        style={{ width:SCREEN_WIDTH* 0.1, height:SCREEN_WIDTH* 0.1, marginLeft: 10, borderRadius: (SCREEN_WIDTH* 0.1 + SCREEN_WIDTH* 0.1)/2 }}></Image>)
     case "Quote":
-        return (<Image resizeMode = 'stretch' source = {{uri: 'https://firebasestorage.googleapis.com/v0/b/test-fb2a3.appspot.com/o/dataImages%2FtipsTypeImages%2Ficon_quote.png?alt=media&token=5b9cd387-6dd7-4183-aba3-ec4c1865e193'}} style={{ width:25, height:25, borderRadius:(25/2)}}></Image>)
+        return (<Image resizeMode = 'contain' source = {{uri: 'https://firebasestorage.googleapis.com/v0/b/test-fb2a3.appspot.com/o/dataImages%2FtipsTypeImages%2Ficon_quote.png?alt=media&token=5b9cd387-6dd7-4183-aba3-ec4c1865e193'}} 
+        style={{ width:SCREEN_WIDTH* 0.1, height:SCREEN_WIDTH* 0.1, marginLeft: 10, borderRadius: (SCREEN_WIDTH* 0.1 + SCREEN_WIDTH* 0.1)/2}}></Image>)
 }
 }
 
 
 //render flatlist of tips
 renderItemTips(item){
-  return(
+    return(
+  <View style = {styles.cardviewcontent}>
+  <View style = {{ flex: 1, flexDirection: 'column', marginTop: 15, marginBottom: 15, marginLeft: 10, marginRight: 10,}} >
   <TouchableHighlight onPress={() => this._pressRow(item.id)}>
-  <View style = {{ flex: 1, marginBottom: 15, borderWidth:2, borderColor: '#515050', marginLeft:20, marginRight: 20, borderRadius: 25,}}>
-  <View style = {{ flex: 1, flexDirection: 'column', justifyContent: 'center', marginTop: 15, marginBottom: 15, marginLeft: 10, marginRight: 10}} >
-  
-  <View style = {{ flex: 1, flexDirection: 'row'}}>
+  <View style = {{ flex: 1, flexDirection: 'row', justifyContent: 'center'}} >
+  {this.getImageTypeTips(item.type)}
+  <View style = {{flex: 1, flexDirection: 'column', marginLeft: 10}}>
+
+  <View style = {{flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline'}}>
 
   <View style = {{flex: 1,}}>
-  <View style = {{ flex: 1, flexDirection: 'row', alignItems: 'baseline', alignSelf:'flex-start'}}>
-  <View style={styles.viewIcon}>
-  {this.getImageTypeTips(item.type)}
-  </View>
-  <Text style = {{marginLeft:5, color:'#e67e22', fontSize: 12,}}>{item.type}</Text>
+  <View style = {{borderColor: '#e67e22', borderRadius: 5, borderWidth: 2, alignSelf: 'flex-start'}}>
+  <Text style = {{margin:2, color:'#e67e22', fontSize: 12,}}>{item.type}</Text>
   </View>
   </View>
-
-  <View style = {{flex: 1, flexDirection: 'row', alignItems: 'baseline', position: 'absolute', right: 0}}>
-  <Text style = {{marginLeft:5, color:'#000000', fontSize: 12,}}>Posted :</Text>
-  <View style = {{ borderColor: '#000000', borderRadius: 5, borderWidth: 2, marginLeft:5}}>
+  
+  <View style = {{flex: 1, flexDirection: 'row', alignItems: 'baseline', alignSelf: 'flex-end'}}>
+  <Icon name="clock2" style={{ paddingRight:5,}} size={13} color = '#000'/>
   <Text style = {{margin:2, color:'#000000', fontSize: 12}}>{item.date}</Text>
   </View>
+
   </View>
 
-  
-  </View>
-  <View style={{ flex:1}}>
-  <Text style = {{marginLeft: 20, marginRight: 20, marginTop:3, fontSize: 14, fontWeight: 'bold',}}>{item.title}</Text>
-  </View>
-
+  <Text style = {{fontSize: 14, fontWeight: 'bold', }}>{item.title}</Text>
+  {/* color = '#2c3e50' */}
   </View>
   </View>
   </TouchableHighlight>
+  <View style = {{alignItems: 'flex-end'}}>
+  <PinIconImage name = "pin" favorite={this.state.pressStatus} />
+  </View>
+  </View>
+  </View>
   )
 }
 
@@ -301,20 +324,29 @@ renderItemTips(item){
           </View>
         </View>
       </Modal>
-      <Modal style = {{flex:1, justifyContent: 'center'}} visible = {this.state.Modalopen} onRequestClose = {() => console.warn("this is close modal")}>
+      <Modal style = {{flex:1}} visible = {this.state.Modalopen} onRequestClose = {() => console.warn("this is close modal")}>
                 <TouchableHighlight style = {{margin:10}} onPress ={this._onCloseModal}>
-                <Image source = {require('../../images/icon_delete.png')}/>
+                <Image source = {require('../../images/icon_delete.png')} style = {{ width:20, height:20 }}/>
                 </TouchableHighlight>
+                <View style = {{flexDirection: 'row',marginLeft: SCREEN_WIDTH * 0.05, marginRight: SCREEN_WIDTH * 0.05, alignItems: 'baseline',justifyContent: 'space-between'}}>
+                <View style = {{flexDirection: 'row',alignItems: 'baseline'}}>
+                <Image resizeMode = 'stretch' source = {{uri: 'https://firebasestorage.googleapis.com/v0/b/test-fb2a3.appspot.com/o/dataImages%2FtipsTypeImages%2Ficon_annou.png?alt=media&token=b15cf403-ed6e-4e7c-90d9-353035ee3399'}} style={{ width:25, height:25, borderRadius:(25/2),}}></Image>
+                <Text style = {{marginLeft: 7, color:'#e67e22'}}>Announcement</Text>
+                </View>
+                <Text style = {{fontSize: 14, fontWeight: 'bold',}}>ย้อนกลับไปอ่านใหม่</Text>
+                </View>
                 <View style = {{flex:1, justifyContent: 'center' , flexDirection: 'column', alignItems: 'center',}}>
                     <View style = {{flex:3,}}>
                         <CardStack
                         style={styles.content}
                         renderNoMoreCards={() => <Text style={{fontWeight:'700', fontSize:18, color:'gray'}}>No more cards :(</Text>}
-                        disableTopSwipe
-                        disableBottomSwipe
-                        onSwipedLeft={this.swipeLeft}
-                        onSwipedRight = {this.swipeRight}
-                        verticalSwipe = {false}
+                        disableLeftSwipe
+                        disableRightSwipe
+                        // onSwipedLeft={this.swipeLeft}
+                        // onSwipedRight = {this.swipeRight}
+                        onSwipedTop = {this.swipeTop}
+                        onSwipedBottom = {this.swipeBottom}
+                        horizontalverticalSwipe = {false}
                         ref={swiper => {
                           this.swiper = swiper
                         }}
@@ -326,7 +358,7 @@ renderItemTips(item){
                         <Image source={require('../../images/icon_tips.png')} resizeMode={'contain'} style={{ height: 32, width: 32, borderRadius: 5, marginTop: 10, marginBottom:10, marginLeft:10}} />
                         <Text style = {{fontSize: 18, fontWeight: 'bold', color: '#000000', marginTop: 7, marginLeft: 3}}>{item.id} {item.title}</Text>
                         </View>
-                        <ImageBackground source={item.uri} resizeMode={'stretch'} style={{ height: 120, width: SCREEN_WIDTH* 0.7, justifyContent:'center', alignSelf: 'center', marginTop: 7}}>
+                        <ImageBackground source={item.uri} resizeMode={'stretch'} style={{ height: 120, width: SCREEN_WIDTH* 0.8, justifyContent:'center', alignSelf: 'center', marginTop: 7}}>
                         <Text style = {{fontSize: 18, fontWeight: 'bold', color: '#fff', marginHorizontal: 30, textAlign: 'center', 
                         textShadowColor: 'rgba(0, 0, 0, 0.75)', textShadowOffset: {width: -1, height: 1}, textShadowRadius: 10}}>
                         {item.title}</Text>
@@ -341,21 +373,24 @@ renderItemTips(item){
 
                     <View style={styles.buttonContainer}>
                     <View>
-                      <Text style = {{fontSize: 14, fontWeight: 'bold', color: '#ff4d4d',}}>Prev</Text>
-                      <TouchableOpacity style={[styles.button,styles.red]} onPress={()=>{
-                        this.swiper.swipeLeft();
+                      {/* <Text style = {{fontSize: 14, fontWeight: 'bold', color: '#ff4d4d',}}>Prev</Text> */}
+                      <TouchableOpacity style={styles.button} onPress={()=>{
+                        this.swiper.swipeTop()
                       }}>
                         <Image source={require('../../images/icon_left.png')} resizeMode={'contain'} style={{ height: 32, width: 32, borderRadius: 5 }} />
                       </TouchableOpacity>
                       </View>
                       <View>
-                      <Text style = {{fontSize: 14, fontWeight: 'bold', color: '#17c0eb', textAlign:'center',}}>{this.state.cardIndex +1 } / {ARTICLES_length}</Text>
+                      <View style = {{flexDirection: 'row', alignItems:'center', alignSelf:'center'}}>
+                      <Text style = {{fontSize: 13, fontWeight: 'bold', color: '#4cd137'}}>{this.state.cardIndex +1 }/ </Text>
+                      <Text style = {{fontSize: 13, fontWeight: 'bold',}}>{ARTICLES_length} Cards</Text>
+                      </View>
                       <Progress.Bar progress={(this.state.cardIndex + 1)/ ARTICLES_length} width={SCREEN_WIDTH*0.5} height={15} style = {{alignSelf: 'center', marginTop:10}}/>
                       </View>
                       <View>
-                      <Text style = {{fontSize: 14, fontWeight: 'bold', color: '#32ff7e',}}>Next</Text>
-                      <TouchableOpacity style={[styles.button,styles.green]} onPress={()=>{
-                        this.swiper.swipeRight();
+                      {/* <Text style = {{fontSize: 14, fontWeight: 'bold', color: '#32ff7e',}}>Next</Text> */}
+                      <TouchableOpacity style={styles.button} onPress={()=>{
+                        this.swiper.swipeBottom();
                       }}>
                         <Image source={require('../../images/icon_right.png')} resizeMode={'contain'} style={{ height: 32, width: 32, borderRadius: 5 }} />
                       </TouchableOpacity>
@@ -373,12 +408,12 @@ renderItemTips(item){
                             ]
                         )}
                     >
-                        <View style={{ flex: 1, backgroundColor: 'white', paddingTop: 20 }}>
+                        <View style={{ flex: 1, backgroundColor: '#EEEEEE' }}>
                         <Swiper height={200} autoplay showsButtons dot={<View style={{backgroundColor: 'rgba(255,255,255,.3)', width: 8, height: 8, borderRadius: 3, marginLeft: 7, marginRight: 7}} />}
-          activeDot={<View style={{backgroundColor: '#fff', width: 8, height: 8, borderRadius: 3, marginLeft: 7, marginRight: 7}} />}
-          paginationStyle={{
-            bottom: 10
-          }}>
+                          activeDot={<View style={{backgroundColor: '#fff', width: 8, height: 8, borderRadius: 3, marginLeft: 7, marginRight: 7}} />}
+                          paginationStyle={{
+                            bottom: 10
+                          }}>
                         {dataFeature.map((item) => {
                           return (
                         <View style={styles.slide1} key={item.id}>
@@ -390,11 +425,13 @@ renderItemTips(item){
                           );
                         })}
                         </Swiper>
-                          <View style = {{flex:1, justifyContent: 'center', marginTop:15}}>
-                        <FlatList data = {this.state.dataFeatures} keyExtractor={this._keyExtractor}
+                        <Text style = {{marginTop: 10, marginRight: 10, marginBottom: 10,marginLeft: 20, fontWeight: 'bold', fontFamily: 'Roboto_medium'}}>Featured Topics</Text>
+                        <View style = {{flex:1, justifyContent: 'center', backgroundColor: '#fff'}}>
+                        <FlatList data = {this.state.dataTips} keyExtractor={this._keyExtractor}
                         renderItem = {({item}) => this.renderItem(item)} />
                         </View>
-                        <View style = {{flex:1, justifyContent: 'center', borderBottomColor: '#c9c9c9', borderBottomWidth: 0.5}}>
+                        <View style = {{flex:1, justifyContent: 'center',backgroundColor: '#EEEEEE', borderBottomColor: '#c9c9c9', borderBottomWidth: 0.5}}>
+                        <Text style = {{marginTop: 10, marginRight: 10, marginBottom: 10,marginLeft: 20, fontWeight: 'bold', fontFamily: 'Roboto_medium'}}>Latest Feed</Text>
                         <FlatList data = {this.state.dataTips} keyExtractor={this._keyExtractor}
                         renderItem = {({item}) => this.renderItemTips(item)} />
                         </View>
@@ -469,9 +506,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  cardviewcontent:{ 
+    flex: 1, 
+    overflow: 'hidden',
+    marginBottom: 15, 
+    marginLeft:20, 
+    marginRight: 20, 
+    borderRadius: 25,
+    shadowColor: '#000000', 
+    shadowOpacity : 0.24, 
+    shadowRadius: 3, 
+    backgroundColor: '#ffffff', 
+    borderRadius: 5, 
+    elevation: 3,
+  },
   card:{
-    width: SCREEN_WIDTH* 0.8,
-    height: SCREEN_HEIGHT* 0.7,
+    width: SCREEN_WIDTH* 0.9,
+    height: SCREEN_HEIGHT* 0.65,
     backgroundColor: '#fff',
     borderRadius: 5,
     borderColor: '#000000',
@@ -491,7 +542,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FEB12C',
   },
   buttonContainer:{
-    width:SCREEN_WIDTH*0.8,
+    width:SCREEN_WIDTH*0.9,
     height: SCREEN_HEIGHT* 0.125,
     flexDirection:'row',
     justifyContent: 'space-around',

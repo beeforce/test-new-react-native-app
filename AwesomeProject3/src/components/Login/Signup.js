@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, TextInput, TouchableOpacity, Dimensions, ImageBackground  } from 'react-native'
+import { Text, StyleSheet, View, TextInput, TouchableOpacity, Dimensions, ImageBackground, Platform, SafeAreaView  } from 'react-native'
 import * as firebase from 'firebase';
 
 

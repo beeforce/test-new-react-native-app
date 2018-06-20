@@ -1,7 +1,5 @@
 import React from 'react';
-import { Notifications } from 'expo';
-import { createSwitchNavigator } from 'react-navigation';
-import { View } from 'react-native';
+import { createSwitchNavigator, SafeAreaView } from 'react-navigation';
 
 import MainTabNavigator from './MainTabNavigator';
 
@@ -18,8 +16,9 @@ export default class RootNavigation extends React.Component {
   render() {
     // return <AppNavigator screenProps={this.props} />;
     return(
-    <View style = {{flex: 1}}>
-    <AppNavigator /></View> 
+      <SafeAreaView style={{flex: 1, backgroundColor: '#ddd'}}>
+      <AppNavigator />
+    </SafeAreaView>
     );
   }
 }
